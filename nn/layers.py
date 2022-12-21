@@ -1,6 +1,7 @@
 from typing import Any, Dict, Callable
 import numpy as np
 from nn.tensor import Tensor
+from nn.function import sigmoid, tanh, tanh_grad, relu, relu_grad
 
 
 class Layer:
@@ -22,6 +23,7 @@ class Linear(Layer):
     """
     全连接层 : w * x + b
     """
+
     def __init__(self, input_size: int, output_size: int) -> None:
         super().__init__()
         self.params['w'] = np.random.randn(input_size, output_size)
@@ -72,18 +74,38 @@ class Activation(Layer):
         return self.f_prime(self.inputs) * grad
 
 
-def tanh(x: Tensor) -> Tensor:
-    return np.tanh(x)
-
-
-def tanh_prime(x: Tensor) -> Tensor:
-    y = tanh(x)
-    return 1 - y ** 2
-
-
 class Tanh(Activation):
     """
     tanh激活函数
     """
+
     def __init__(self) -> None:
-        super().__init__(tanh, tanh_prime)
+        super().__init__(tanh, tanh_grad)
+
+
+class Relu(Activation):
+    """
+    relu激活函数
+    """
+
+    def __init__(self) -> None:
+        super().__init__(relu, relu_grad)
+
+
+class Sigmoid(Activation):
+    """
+    sigmoid函数
+    """
+
+    def __init__(self) -> None:
+        self.out = None
+
+        def sigmoid_forward(x: Tensor) -> Tensor:
+            out = sigmoid(x)
+            self.out = out
+            return out
+
+        def sigmoid_prime(x: Tensor) -> Tensor:
+            return x * (1.0 - self.out) * self.out
+
+        super().__init__(sigmoid_forward, sigmoid_prime)

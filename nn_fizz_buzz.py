@@ -2,8 +2,9 @@ from typing import List
 import numpy as np
 
 from nn.nn import NeuralNet
-from nn.layers import Linear, Tanh
-from nn.optim import SGD
+from nn.layers import Linear, Tanh, Relu, Sigmoid
+from nn.optim import SGD, Momentum, Adam
+from nn.loss import CrossEntropyLoss
 from nn.train import train
 
 
@@ -36,7 +37,7 @@ net = NeuralNet([
     Linear(input_size=50, output_size=4)
 ])
 
-train(net, inputs, targets, optimizer=SGD(lr=0.001))
+train(net, inputs, targets, optimizer=Adam())
 
 num_correct = 0
 for x in range(1, 101):

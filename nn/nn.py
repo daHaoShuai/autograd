@@ -7,6 +7,7 @@ class NeuralNet(Layer):
     """
     组合计算层构成神经网络
     """
+
     def __init__(self, layers: Sequence[Layer]) -> None:
         super().__init__()
         self.layers = layers
