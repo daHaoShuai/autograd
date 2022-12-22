@@ -15,7 +15,7 @@ class Layer:
     def backward(self, grad: Tensor) -> Tensor:
         raise NotImplementedError
 
-    def __call__(self, *args: Any, **kwds: Any) -> Any:
+    def __call__(self, *args: Any, **kwds: Any) -> Tensor:
         return self.forward(*args, **kwds)
 
 

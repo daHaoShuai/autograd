@@ -3,6 +3,9 @@ from nn.nn import NeuralNet
 
 
 class Optimizer:
+    def zero_grad(self, net: NeuralNet) -> None:
+        raise NotImplementedError
+
     def step(self, net: NeuralNet) -> None:
         raise NotImplementedError
 
@@ -15,6 +18,10 @@ class SGD(Optimizer):
     def __init__(self, lr: float = 0.01) -> None:
         super().__init__()
         self.lr = lr
+
+    def zero_grad(self, net: NeuralNet) -> None:
+        for _, grad in net.params_and_grads():
+            grad = np.zeros_like(grad)
 
     def step(self, net: NeuralNet) -> None:
         # 更新权重
@@ -32,6 +39,10 @@ class Momentum(Optimizer):
         self.lr = lr
         self.momentum = momentum
         self.v = None
+
+    def zero_grad(self, net: NeuralNet) -> None:
+        for _, grad in net.params_and_grads():
+            grad = np.zeros_like(grad)
 
     def step(self, net: NeuralNet) -> None:
         if self.v is None:
@@ -57,6 +68,10 @@ class Adam(Optimizer):
         self.iter = 0
         self.m = None
         self.v = None
+
+    def zero_grad(self, net: NeuralNet) -> None:
+        for _, grad in net.params_and_grads():
+            grad = np.zeros_like(grad)
 
     def step(self, net: NeuralNet) -> None:
         if self.m is None and self.v is None:

@@ -23,7 +23,7 @@ def train(net: NeuralNet,
     loss            : 损失函数
     optimizer       : 优化器
     """
-    for epoch in range(num_epochs):
+    for epoch in range(1, num_epochs+1):
         # 计算每一轮训练的损失值
         epoch_loss = 0.0
         # 获取批数据
@@ -38,4 +38,6 @@ def train(net: NeuralNet,
             net.backward(grad)
             # 通过梯度更新权重
             optimizer.step(net)
+            # 梯度清零
+            optimizer.zero_grad(net)
         print(f'epoch is {epoch}, epoch_loss is {epoch_loss}')
